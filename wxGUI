@@ -1,0 +1,84 @@
+import wx
+
+
+class WindowClass(wx.Frame):
+    def __init__(self, *args, **kwargs):
+        super(WindowClass, self).__init__(*args, **kwargs)
+
+        self.basicGUI()
+
+    def basicGUI(self):
+
+        panel = wx.Panel(self)
+
+        menuBar = wx.MenuBar()
+
+        fileButton = wx.Menu()
+        editButton = wx.Menu()
+        importItem = wx.Menu()
+
+        importItem.Append(wx.ID_ANY,'Import Document...')
+        importItem.Append(wx.ID_ANY,'Import Video...')
+        importItem.Append(wx.ID_ANY,'Import Image...')
+
+        fileButton.AppendMenu(wx.ID_ANY, 'import', importItem)
+
+        toolBar = self.CreateToolBar()
+        quitToolButton = toolBar.AddLabelTool(wx.ID_ANY, 'Quit', wx.Bitmap('toolQuit.png'))
+
+        toolBar.Realize()
+        self.Bind(wx.EVT_TOOL, self.Quit, quitToolButton)
+
+        ExitItem = wx.MenuItem(fileButton, wx.ID_EXIT, 'Quit\tCtrl+Q')
+        ExitItem.SetBitmap(wx.Bitmap('LOSER.png'))
+        fileButton.AppendItem(ExitItem)
+
+        menuBar.Append(fileButton, 'File')
+        menuBar.Append(editButton, 'Edit')
+
+        self.SetMenuBar(menuBar)
+
+        self.Bind(wx.EVT_MENU, self.Quit, ExitItem)
+
+        NameBox = wx.TextEntryDialog(None, 'Que es tu nombre?', 'Bienvendos', 'Name')
+
+        if NameBox.ShowModal() == wx.ID_OK:
+            UserName = NameBox.GetValue()
+
+        YesNoBox = wx.MessageDialog(None, 'Do you like playing with wxPython?', 'Question', wx.YES_NO)
+        YesNoAnswer = YesNoBox.ShowModal()
+        YesNoBox.Destroy()
+
+
+        if YesNoAnswer == wx.ID_NO:
+            UserName = 'Loser'
+
+        ChooseOneBox = wx.SingleChoiceDialog(None, 'What is your favorite color?',
+                                             'ColorQuestion', ['green', 'red', 'blue'])
+        if ChooseOneBox.ShowModal() == wx.ID_OK:
+            FavColor = ChooseOneBox.GetStringSelection()
+
+        wx.TextCtrl(panel, pos=(3,100), size= (150, 50))
+
+        AweText = wx.StaticText(panel, -1, ' awesome text ', (3,3))
+        AweText.SetForegroundColour('#ffffff')
+        AweText.SetBackgroundColour('#009933')
+
+        RlyAweText = wx.StaticText(panel, -1, ' Custom Awesome ',(3, 30))
+        RlyAweText.SetForegroundColour(FavColor)
+        RlyAweText.SetBackgroundColour('#000066')
+
+
+        self.SetTitle('Welcome '+UserName)
+        self.Show(True)
+
+    def Quit(self, e):
+        self.Close()
+
+
+def main():
+    app = wx.App()
+    WindowClass(None)
+    app.MainLoop()
+
+main()
